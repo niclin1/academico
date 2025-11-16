@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  api:
+    build: .
+    container_name: academico_api
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/escola_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: pass
+
+  db:
+    image: mysql:8.0
+    container_name: escola_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: escola_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    ports:
+      - "3307:3306"   # <<< ALTERADO AQUI!
+    volumes:
+      - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:
